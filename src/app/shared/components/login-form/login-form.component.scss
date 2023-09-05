@@ -1,0 +1,29 @@
+@import 'src/app/shared/styles/styles.scss';
+
+.login-form {
+  width: 260px;
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+input:invalid.ng-untouched {
+  border-color: #cfcfcf;
+}
+
+input:invalid.ng-untouched.error {
+  border-color: #ff0000;
+}
+
+input.error {
+  border: 1px solid #ff0000;
+}
+
+.text-danger {
+  opacity: 0;
+}
+
+.text-danger.error {
+  opacity: 1;
+}

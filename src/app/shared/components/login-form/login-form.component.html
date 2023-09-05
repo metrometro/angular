@@ -1,0 +1,57 @@
+<h2 class="text-align-center">Login</h2>
+<div class="app-plate">
+  <form #loginForm="ngForm">
+    <div class="login-form">
+      <div>
+        <div class="form__control">
+          <label for="email">Email</label>
+          <input
+            type="text"
+            id="email"
+            placeholder="Input text"
+            #email="ngModel"
+            [(ngModel)]="model.email"
+            name="email"
+            emailValidator
+            required
+            [class.error]="(loginForm.submitted || email.touched) && email.errors"
+          />
+          <span
+            id="emailErrorMessage"
+            class="text-danger"
+            name="email"
+            [class.error]="(loginForm.submitted || email.touched) && email.errors"
+            >Email is required.
+          </span>
+        </div>
+        <div class="form__control">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Input text"
+            #password="ngModel"
+            [(ngModel)]="model.password"
+            name="password"
+            required
+            [class.error]="(loginForm.submitted || password.touched) && password.errors"
+          />
+          <span
+            id="passwordErrorMessage"
+            class="text-danger"
+            name="password"
+            [class.error]="(loginForm.submitted || password.touched) && password.errors"
+          >Password is required.</span>
+        </div>
+      </div>
+      <div>
+        <div class="form__action">
+          <app-button text="login"></app-button>
+        </div>
+        <div class="form__text">
+          If you don't have an account you may <strong>Registration</strong>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,75 @@
+@import 'src/app/shared/styles/styles';
+
+.course {
+ min-width: 60vw;
+
+  &__flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    & input {
+      flex: 1;
+    }
+
+    & app-button {
+      margin-left: 16px;
+    }
+
+    & .course__duration {
+      margin-left: 16px;
+    }
+  }
+
+  &__authors {
+    margin-top: 8px;
+    display: flex;
+    justify-content: space-between;
+
+    &-item {
+      margin-right: 10px;
+    }
+  }
+
+  &__icon {
+    margin-left: 4px;
+    cursor: pointer;
+  }
+}
+
+.authors__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  font-size: 14px;
+}
+
+.authors__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  list-style: none;
+}
+
+.text-empty {
+  font-size: 10px;
+}
+
+.form__action {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+input.error, textarea.error {
+  border-color: #ff0000;
+}
+
+.text-danger {
+  opacity: 0;
+}
+
+.text-danger.error {
+  opacity: 1;
+}

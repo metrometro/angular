@@ -1,0 +1,55 @@
+<h2 class="text-align-center">Registration</h2>
+<div class="app-plate">
+  <form class="registration-form" [formGroup]="registrationForm" #regForm="ngForm">
+    <div>
+      <div class="form__control">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          id="regName"
+          placeholder="Input text"
+          formControlName="name"
+          [class.error]="registrationForm.controls['name'].errors && (registrationForm.controls['name'].touched || regForm.submitted)"
+        />
+        <span
+          id="nameErrorMessage"
+          class="text-danger"
+          [class.error]="registrationForm.controls['name'].errors && (registrationForm.controls['name'].touched || regForm.submitted)"
+        >Name is required.</span>
+      </div>
+      <div class="form__control">
+        <label for="email">Email</label>
+        <input
+          type="text"
+          id="regEmail"
+          placeholder="Input text"
+          formControlName="email"
+          [class.error]="registrationForm.controls['email'].errors && (registrationForm.controls['email'].touched || regForm.submitted)"
+        />
+        <span
+          id="emailErrorMessage"
+          class="text-danger"
+          [class.error]="registrationForm.controls['email'].errors && (registrationForm.controls['email'].touched || regForm.submitted)"
+        >Email is required.</span>
+      </div>
+      <div class="form__control">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="regPassword"
+          placeholder="Input text"
+          formControlName="password"
+          [class.error]="registrationForm.controls['password'].errors && (registrationForm.controls['password'].touched || regForm.submitted)"
+        />
+        <span
+          id="passwordErrorMessage"
+          class="text-danger"
+          [class.error]="registrationForm.controls['password'].errors && (registrationForm.controls['password'].touched || regForm.submitted)"
+        >Password is required.</span>
+      </div>
+    </div>
+    <div class="form__action">
+      <app-button text="login"></app-button>
+    </div>
+  </form>
+</div>

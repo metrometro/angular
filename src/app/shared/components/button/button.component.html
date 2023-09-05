@@ -1,0 +1,5 @@
+<div class="app-button">
+  <span *ngIf="text">{{ text }}</span>
+  <fa-icon *ngIf="icon === 'remove'" [icon]="['fas', 'trash-can']"></fa-icon>
+  <fa-icon *ngIf="icon === 'edit'" [icon]="['fas', 'pen-to-square']"></fa-icon>
+</div>

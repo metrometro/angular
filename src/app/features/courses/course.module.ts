@@ -17,4 +17,4 @@ const components = [
   ],
   exports: [components]
 })
-export class CoursesModule { }
+export class CourseModule { }

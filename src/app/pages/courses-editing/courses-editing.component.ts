@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
 
 import { Course } from "@app/models/course.model";
-import { Author } from "@app/models/author.model";
 import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-courses-editing",
@@ -12,31 +12,24 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
   styleUrls: ["./courses-editing.component.scss"],
 })
 export class CoursesEditingComponent implements OnInit, OnDestroy {
-  authors: Author[] = [];
-  course!: Course;
+  course$ = this.coursesStateFacade.course$;
+  authors$ = this.coursesStoreService.authors$;
 
   private subscriptions: Subscription[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private coursesStoreService: CoursesStoreService,
-    private router: Router
+    private router: Router,
+    private coursesStateFacade: CoursesStateFacade
   ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
       this.activatedRoute.params.subscribe((p) => {
         const id = p["id"];
-        this.subscriptions.push(
-          this.coursesStoreService.courses$.subscribe(
-            (c) => (this.course = c[0])
-          )
-        );
-        this.coursesStoreService.getCourse(id);
+        this.coursesStateFacade.getSingleCourse(id);
       })
-    );
-    this.subscriptions.push(
-      this.coursesStoreService.authors$.subscribe((a) => (this.authors = a))
     );
     this.coursesStoreService.getAllAuthors();
   }
@@ -46,7 +39,7 @@ export class CoursesEditingComponent implements OnInit, OnDestroy {
   }
 
   onCourseEdit(course: Course) {
-    this.coursesStoreService.editCourse(course.id, course);
+    this.coursesStateFacade.editCourse(course, course.id);
     this.subscriptions.push(
       this.coursesStoreService.isLoading$.subscribe((r) => {
         if (!r) {

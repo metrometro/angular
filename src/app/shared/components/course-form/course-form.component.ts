@@ -1,4 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Location } from "@angular/common";
 import { FaIconLibrary } from "@fortawesome/angular-fontawesome";
@@ -12,8 +19,8 @@ import { Course } from "@app/models/course.model";
   templateUrl: "./course-form.component.html",
   styleUrls: ["./course-form.component.scss"],
 })
-export class CourseFormComponent implements OnInit {
-  @Input() course!: Course;
+export class CourseFormComponent implements OnChanges {
+  @Input() course!: Course | null;
   @Input() authors: Author[] = [];
 
   @Output() edit = new EventEmitter<Course>();
@@ -31,34 +38,8 @@ export class CourseFormComponent implements OnInit {
     library.addIconPacks(fas);
   }
 
-  ngOnInit(): void {
-    this.courseAuthors = this.course
-      ? this.authors.filter((a) => this.course.authors.includes(a.id))
-      : [];
-    if (this.course) {
-      this.authors = this.authors.filter(
-        (a) => !this.course.authors.includes(a.id)
-      );
-    }
-    this.courseForm = this.fb.group({
-      title: this.fb.control(this.course ? this.course.title : "", [
-        Validators.minLength(2),
-        Validators.required,
-      ]),
-      description: this.fb.control(this.course ? this.course.description : "", [
-        Validators.minLength(2),
-        Validators.required,
-      ]),
-      author: this.fb.control("", [
-        Validators.minLength(2),
-        Validators.pattern(/^[a-z0-9]+$/i),
-      ]),
-      authors: this.fb.array(this.authors),
-      duration: this.fb.control(this.course ? this.course.duration : 0, [
-        Validators.min(0),
-        Validators.required,
-      ]),
-    });
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initForm();
   }
 
   onAuthorCreate() {
@@ -98,9 +79,9 @@ export class CourseFormComponent implements OnInit {
       return;
     }
     const course: Course = {
-      id: this.course.id,
+      id: this.course?.id || "",
       authors: this.courseAuthors.map((a) => a.id),
-      creationDate: this.course.creationDate,
+      creationDate: this.course?.creationDate || new Date(),
       description: this.courseForm.controls["description"].getRawValue(),
       duration: this.courseForm.controls["duration"].getRawValue(),
       title: this.courseForm.controls["title"].getRawValue(),
@@ -125,5 +106,35 @@ export class CourseFormComponent implements OnInit {
 
   onCancel() {
     this.location.back();
+  }
+
+  private initForm() {
+    this.courseAuthors = this.course
+      ? this.authors.filter((a) => this.course?.authors.includes(a.id))
+      : [];
+    if (this.course) {
+      this.authors = this.authors.filter(
+        (a) => !this.course?.authors.includes(a.id)
+      );
+    }
+    this.courseForm = this.fb.group({
+      title: this.fb.control(this.course ? this.course.title : "", [
+        Validators.minLength(2),
+        Validators.required,
+      ]),
+      description: this.fb.control(this.course ? this.course.description : "", [
+        Validators.minLength(2),
+        Validators.required,
+      ]),
+      author: this.fb.control("", [
+        Validators.minLength(2),
+        Validators.pattern(/^[a-z0-9]+$/i),
+      ]),
+      authors: this.fb.array([...this.authors]),
+      duration: this.fb.control(this.course ? this.course.duration : 0, [
+        Validators.min(0),
+        Validators.required,
+      ]),
+    });
   }
 }

@@ -12,6 +12,10 @@ import { AppRoutingModule } from "./app-routing.module";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AuthModule } from "./auth/auth.module";
 import { TokenInterceptor } from "./auth/interceptors/token.interceptor";
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
+
+import { reducers, effects } from "./store";
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,6 +27,8 @@ import { TokenInterceptor } from "./auth/interceptors/token.interceptor";
     AppRoutingModule,
     HttpClientModule,
     AuthModule,
+    StoreModule.forRoot(reducers),
+    EffectsModule.forRoot(effects),
   ],
   providers: [
     AuthorizedGuard,
@@ -32,8 +38,8 @@ import { TokenInterceptor } from "./auth/interceptors/token.interceptor";
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -4,7 +4,7 @@
 </app-header>
 <div class="content">
   <app-courses-list
-    [courses]="courses"
+    [courses]="(courses$ | async) || []"
     [editable]="isAdmin"
     (showCourse)="onShow($event)"
     (editCourse)="onEdit($event)"

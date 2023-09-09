@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { Subscription } from "rxjs";
 
 import { Course } from "@app/models/course.model";
 import { Author } from "@app/models/author.model";
 import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-courses-adding",
@@ -17,8 +18,8 @@ export class CoursesAddingComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private coursesStoreService: CoursesStoreService,
+    private coursesStateFacade: CoursesStateFacade,
     private router: Router
   ) {}
 
@@ -34,7 +35,7 @@ export class CoursesAddingComponent implements OnInit, OnDestroy {
   }
 
   onCourseCreate(course: Course) {
-    this.coursesStoreService.createCourse(course);
+    this.coursesStateFacade.createCourse(course);
     this.subscriptions.push(
       this.coursesStoreService.isLoading$.subscribe((r) => {
         if (!r) {

@@ -6,6 +6,7 @@ import { Course } from "@app/models/course.model";
 import { AuthService } from "@app/auth/services/auth.service";
 import { UserStoreService } from "@app/user/services/user-store.service";
 import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-courses",
@@ -13,7 +14,7 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
   styleUrls: ["./courses.component.scss"],
 })
 export class CoursesComponent implements OnInit, OnDestroy {
-  courses: Course[] = [];
+  courses$ = this.getAllCourses();
   isAdmin: boolean = false;
 
   private subscribtions: Subscription[] = [];
@@ -22,36 +23,20 @@ export class CoursesComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private userStoreService: UserStoreService,
     private courseStoreService: CoursesStoreService,
-    private router: Router
+    private router: Router,
+    private coursesStateFacade: CoursesStateFacade
   ) {}
 
   ngOnInit(): void {
-    this.userStoreService.isAdmin$.subscribe((v) => (this.isAdmin = v));
-    this.courseStoreService.getAll();
-    this.courseStoreService.getAllAuthors();
     this.subscribtions.push(
-      this.courseStoreService.courses$
-        .pipe(
-          combineLatestWith(this.courseStoreService.authors$),
-          map(([c, a]) => {
-            const courses = [];
-            for (let i = 0; i < c.length; i++) {
-              const course = { ...c[i], authors: [...c[i].authors] };
-              for (let j = 0; j < course.authors.length; j++) {
-                const author = a.find((cur) => cur.id === course.authors[j]);
-                course.authors[j] = author?.name || "";
-              }
-              courses.push(course);
-            }
-            return courses;
-          })
-        )
-        .subscribe((c) => (this.courses = c))
+      this.userStoreService.isAdmin$.subscribe((v) => (this.isAdmin = v))
     );
+    this.courseStoreService.getAllAuthors();
+    this.coursesStateFacade.getAllCourses();
   }
 
   ngOnDestroy(): void {
-    this.subscribtions.forEach(s => s.unsubscribe());
+    this.subscribtions.forEach((s) => s.unsubscribe());
   }
 
   onShow(id: string) {
@@ -72,6 +57,24 @@ export class CoursesComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(["/login"]);
+  }
+
+  private getAllCourses() {
+    return this.coursesStateFacade.allCourses$.pipe(
+      combineLatestWith(this.courseStoreService.authors$),
+      map(([c, a]) => {
+        const courses = [];
+        for (let i = 0; i < c.length; i++) {
+          const course = { ...c[i], authors: [...c[i].authors] };
+          for (let j = 0; j < course.authors.length; j++) {
+            const author = a.find((cur) => cur.id === course.authors[j]);
+            course.authors[j] = author?.name || "";
+          }
+          courses.push(course);
+        }
+        return courses;
+      })
+    );
   }
 }

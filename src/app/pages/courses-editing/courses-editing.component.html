@@ -1,6 +1,6 @@
 <app-course-form
-    [authors]="authors"
-    [course]="course" 
+    [authors]="(authors$ | async) || []"
+    [course]="course$ | async" 
     (edit)="onCourseEdit($event)"
     (authorCreate)="onAuthorCreate($event)"
 ></app-course-form>

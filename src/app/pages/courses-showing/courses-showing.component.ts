@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription, combineLatestWith, map } from "rxjs";
 
-import { Course } from "@app/models/course.model";
 import { CoursesStoreService } from "@app/services/courses-store.service";
+import { CoursesStateFacade } from "@app/store/courses/courses.facade";
 
 @Component({
   selector: "app-courses-showing",
@@ -11,12 +11,16 @@ import { CoursesStoreService } from "@app/services/courses-store.service";
   styleUrls: ["./courses-showing.component.scss"],
 })
 export class CoursesShowingComponent implements OnInit, OnDestroy {
-  course!: Course;
+  course$ = this.coursesStateFacade.course$.pipe(
+    combineLatestWith(this.courseStoreService.authors$),
+    this.setAuthors()
+  );
 
   private subscriptions: Subscription[] = [];
 
   constructor(
     private courseStoreService: CoursesStoreService,
+    private coursesStateFacade: CoursesStateFacade,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -24,34 +28,33 @@ export class CoursesShowingComponent implements OnInit, OnDestroy {
     this.subscriptions.push(
       this.activatedRoute.params.subscribe((p) => {
         const id = p["id"];
-        this.courseStoreService.getCourse(id);
+        this.coursesStateFacade.getSingleCourse(id);
         this.courseStoreService.getAllAuthors();
-        this.subscriptions.push(
-          this.courseStoreService.courses$
-            .pipe(
-              combineLatestWith(this.courseStoreService.authors$),
-              map(([c, a]) => {
-                const courses = [];
-                for (let i = 0; i < c.length; i++) {
-                  const course = { ...c[i], authors: [...c[i].authors] };
-                  for (let j = 0; j < course.authors.length; j++) {
-                    const author = a.find(
-                      (cur) => cur.id === course.authors[j]
-                    );
-                    course.authors[j] = author?.name || "";
-                  }
-                  courses.push(course);
-                }
-                return courses;
-              })
-            )
-            .subscribe((c) => (this.course = c[0]))
-        );
       })
     );
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
+  }
+
+  private setAuthors() {
+    return map(([c, a]) => {
+      console.log(c);
+      console.log(a);
+
+      if (!c) {
+        return null;
+      }
+      const authors = [];
+      for (let i = 0; i < c.authors.length; i++) {
+        for (let j = 0; j < a.length; j++) {
+          if (c.authors[i] === a[j].id) {
+            authors.push(a[j].name);
+          }
+        }
+      }
+      return { ...c, authors: authors };
+    });
   }
 }

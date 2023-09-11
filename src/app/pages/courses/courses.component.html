@@ -1,0 +1,15 @@
+<app-header>
+  <span>Harry Potter</span>
+  <app-button text="Logout" (click)="onLogout()"></app-button>
+</app-header>
+<div class="content">
+  <app-courses-list
+    [courses]="courses"
+    [editable]="isAdmin"
+    (showCourse)="onShow($event)"
+    (editCourse)="onEdit($event)"
+    (deleteCourse)="onDelete($event)"
+  >
+  </app-courses-list>
+  <app-button text="create" (click)="onCreate()"></app-button>
+</div>

@@ -46,10 +46,10 @@
       </div>
       <div>
         <div class="form__action">
-          <app-button text="login"></app-button>
+          <app-button text="login" (click)="onLogin()"></app-button>
         </div>
         <div class="form__text">
-          If you don't have an account you may <strong>Registration</strong>
+          If you don't have an account you may<strong (click)="onRegistrationClick()">Registration</strong>
         </div>
       </div>
     </div>

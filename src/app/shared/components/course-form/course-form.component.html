@@ -1,5 +1,6 @@
-<h2>Create / Edit Course</h2>
-<form [formGroup]="courseForm" #course="ngForm">
+<h2 *ngIf="!course">Create Course</h2>
+<h2 *ngIf="course">Edit Course</h2>
+<form [formGroup]="courseForm" #courseF="ngForm">
   <div class="app-plate">
     <div class="course">
       <h3>Main Info</h3>
@@ -10,12 +11,12 @@
           id="title"
           placeholder="Input text"
           formControlName="title"
-          [class.error]="courseForm.controls['title'].errors && (courseForm.controls['title'].touched || course.submitted)"
+          [class.error]="courseForm.controls['title'].errors && (courseForm.controls['title'].touched || courseF.submitted)"
         />
         <span
           id="titleErrorMessage"
           class="text-danger"
-          [class.error]="courseForm.controls['title'].errors && (courseForm.controls['title'].touched || course.submitted)"
+          [class.error]="courseForm.controls['title'].errors && (courseForm.controls['title'].touched || courseF.submitted)"
         >Title is required.</span>
       </div>
       <div class="form__control">
@@ -27,12 +28,12 @@
           rows="4"
           cols="5"
           formControlName="description"
-          [class.error]="courseForm.controls['description'].errors && (courseForm.controls['description'].touched || course.submitted)"
+          [class.error]="courseForm.controls['description'].errors && (courseForm.controls['description'].touched || courseF.submitted)"
         ></textarea>
         <span
           id="descriptionErrorMessage"
           class="text-danger"
-          [class.error]="courseForm.controls['description'].errors && (courseForm.controls['description'].touched || course.submitted)"
+          [class.error]="courseForm.controls['description'].errors && (courseForm.controls['description'].touched || courseF.submitted)"
         >Description is required.</span>
       </div>
       <div class="separator"></div>
@@ -44,7 +45,7 @@
             id="duration"
             placeholder="Input duration"
             formControlName="duration"
-            [class.error]="courseForm.controls['duration'].errors && (courseForm.controls['duration'].touched || course.submitted)"
+            [class.error]="courseForm.controls['duration'].errors && (courseForm.controls['duration'].touched || courseF.submitted)"
           />
           <div class="course__duration">
             {{courseForm.controls['duration'].value | duration}}
@@ -53,7 +54,7 @@
         <span
           id="durationErrorMessage"
           class="text-danger"
-          [class.error]="courseForm.controls['duration'].errors && (courseForm.controls['duration'].touched || course.submitted)"
+          [class.error]="courseForm.controls['duration'].errors && (courseForm.controls['duration'].touched || courseF.submitted)"
         >Duration is required.</span>
       </div>
       <div class="separator"></div>
@@ -65,14 +66,14 @@
             id="author"
             placeholder="Input Author Name"
             formControlName="author"
-            [class.error]="courseForm.controls['author'].errors && (courseForm.controls['author'].touched || course.submitted)"
+            [class.error]="courseForm.controls['author'].errors && (courseForm.controls['author'].touched || courseF.submitted)"
           />
           <app-button id="createAuthor" text="create author" (click)="onAuthorCreate()"></app-button>
         </div>
         <span
           id="authorErrorMessage"
           class="text-danger"
-          [class.error]="courseForm.controls['author'].errors && (courseForm.controls['author'].touched || course.submitted)"
+          [class.error]="courseForm.controls['author'].errors && (courseForm.controls['author'].touched || courseF.submitted)"
         >New author should contain only latin letters and numbers.</span>
         <div class="course__authors">
           <div>
@@ -105,8 +106,9 @@
         </div>
       </div>
       <div class="form__action">
-        <app-button text="cancel"></app-button>
-        <app-button text="create course"></app-button>
+        <app-button text="cancel" (click)="onCancel()"></app-button>
+        <app-button *ngIf="!course" text="create course" (click)="onCourseCreate()"></app-button>
+        <app-button *ngIf="course" text="edit course" (click)="onEditCourse()"></app-button>
       </div>
     </div>
   </div>

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { Location } from '@angular/common';
 
 import { Course } from '@app/app.component';
 
@@ -10,7 +11,13 @@ import { Course } from '@app/app.component';
 export class CourseInfoComponent {
   @Input() course!: Course;
 
+  constructor(private location: Location) {}
+
   getAuthors() {
     return this.course.authors.join();
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

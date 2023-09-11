@@ -1,42 +1,51 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+
+import { Course } from "@app/models/course.model";
+import { Author } from "@app/models/author.model";
+import { SuccessfulRequest } from "@app/models/request.model";
+
+const API_URL = "http://localhost:4000";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: "root",
 })
 export class CoursesService {
-    getAll() {
-        // Add your code here
-    }
+  constructor(private http: HttpClient) {}
 
-    createCourse(course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  getAll() {
+    return this.http.get<SuccessfulRequest<Course[]>>(`${API_URL}/courses/all`);
+  }
 
-    editCourse(id: string, course: any) { // replace 'any' with the required interface
-        // Add your code here
-    }
+  createCourse(course: Course) {
+    return this.http.post<SuccessfulRequest<Course>>(`${API_URL}/courses/add`, course);
+  }
 
-    getCourse(id: string) {
-        // Add your code here
-    }
+  editCourse(id: string, course: Course) {
+    return this.http.put<SuccessfulRequest<Course>>(`${API_URL}/courses/${id}`, course);
+  }
 
-    deleteCourse(id: string) {
-        // Add your code here
-    }
+  getCourse(id: string) {
+    return this.http.get<SuccessfulRequest<Course>>(`${API_URL}/courses/${id}`);
+  }
 
-    filterCourses(value: string) {
-        // Add your code here
-    }
+  deleteCourse(id: string) {
+    return this.http.delete<SuccessfulRequest<Course>>(`${API_URL}/courses/${id}`);
+  }
 
-    getAllAuthors() {
-        // Add your code here
-    }
+  filterCourses(value: string) {
+    // Add your code here
+  }
 
-    createAuthor(name: string) {
-        // Add your code here
-    }
+  getAllAuthors() {
+    return this.http.get<SuccessfulRequest<Author[]>>(`${API_URL}/authors/all`);
+  }
 
-    getAuthorById(id: string) {
-        // Add your code here
-    }
+  createAuthor(name: string) {
+    return this.http.post<SuccessfulRequest<Author>>(`${API_URL}/authors/add`, { name: name });
+  }
+
+  getAuthorById(id: string) {
+   return this.http.get<SuccessfulRequest<Author>>(`${API_URL}/authors/${id}`);
+  }
 }

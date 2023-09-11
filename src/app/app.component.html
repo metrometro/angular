@@ -1,43 +1,45 @@
-<app-header>
+<!-- <app-header>
   <span>Harry Potter</span>
   <app-button text="Logout"></app-button>
-</app-header>
+</app-header> -->
+
+<router-outlet></router-outlet>
 
 <div class="app-root">
   <!-- Search component -->
-  <app-search placeholder="input text some"></app-search> 
+  <!-- <app-search placeholder="input text some"></app-search>  -->
 
   <!-- Info component -->
-  <app-info title="some title" text="some text">
+  <!-- <app-info title="some title" text="some text">
     <app-button text="remove"></app-button>
     <app-button text="edit"></app-button>
-  </app-info>
+  </app-info> -->
 
   <!-- Course Card component -->
-  <app-course-card [course]="courses[0]" [editable]="true" (clickOnShow)="onShowCourse($event)">
+  <!-- <app-course-card [course]="courses[0]" [editable]="true" (clickOnShow)="onShowCourse($event)">
     <app-button icon="remove"></app-button>
     <app-button icon="edit"></app-button>
-  </app-course-card>
+  </app-course-card> -->
 
-  <app-courses-list
+  <!-- <app-courses-list
     [courses]="courses"
     [editable]="true"
     (showCourse)="onShow($event)"
     (editCourse)="onEdit($event)"
     (deleteCourse)="onDelete($event)"
     >
-  </app-courses-list>
+  </app-courses-list> -->
 
-  <app-course-info [course]="courses[0]"></app-course-info>
-
-  <!-- Login Form component -->
-  <app-login-form></app-login-form>
+  <!-- <app-course-info [course]="courses[0]"></app-course-info> -->
 
   <!-- Login Form component -->
-  <app-registration-form></app-registration-form>
+  <!-- <app-login-form></app-login-form> -->
 
   <!-- Login Form component -->
-  <app-course-form></app-course-form>
+  <!-- <app-registration-form></app-registration-form> -->
+
+  <!-- Login Form component -->
+  <!-- <app-course-form></app-course-form> -->
 
   <!-- Modal component -->
   <!-- <app-modal [message]="'Message'" [title]="'Title'" [okButtonText]="'Ok'" [cancelButtonText]="'Cancel'"></app-modal> -->
